@@ -1,15 +1,19 @@
 'use stric';
 
 const qy = require('../db')
-const conexion = require('../db')
 
 module.exports = {
 
     ingresarUnUsuario: async (persona) => {
-        const query = 'SELECT * FROM persona WHERE email=?'
-        const result = await qy(query, [persona.email])
+        const query = 'SELECT * FROM persona WHERE email = ?'
+        nuevoUsuario = await qy(query, [persona.email])
+        if (nuevoUsuario)
+            return nuevoUsuario
 
-        return result
+        query = 'INSERT INTO persona (nombre,alias,apellido,email) VALUES(?,?,?,?)'
+        nuevoUsuario = await qy(query, [persona.nombre, persona.alias, persona.apellido, persona.email])
+
+        return nuevoUsuario
     },
 
     mostrarListaUsuario: async () => {
