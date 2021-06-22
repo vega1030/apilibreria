@@ -1,7 +1,5 @@
 'use stric';
 
-//copy in branch main the archives app.js and db.js
-
 const qy = require('../db')
 const conexion = require('../db')
 
