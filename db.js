@@ -16,11 +16,11 @@ const db_myBook = {
 const conexion = sql.createConnection(db_myBook)
 
 conexion.connect((error) => {
-    if (error) throw console.log(error)
+    if (error) throw console.log('error en la base de datos' + error)
     console.log('connected data base')
 });
 
 //util conexion
 const qy = util.promisify(conexion.query).bind(conexion);
 
-module.exports = qy()
+module.exports = qy
