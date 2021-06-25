@@ -1,9 +1,11 @@
+'use stric';
+
+
 //SQL
 
 const sql = require('mysql');
 const util = require('util');
 
-app.use(express.json());
 
 const db_myBook = {
     host: 'localhost',
@@ -21,4 +23,4 @@ conexion.connect((error) => {
 //util conexion
 const qy = util.promisify(conexion.query).bind(conexion);
 
-module.exports = qy
+module.exports = qy()

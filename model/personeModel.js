@@ -3,45 +3,89 @@
 const qy = require('../db')
 
 module.exports = {
+    /*
+    ----------
+    |ADD USER|
+    ----------
+    */
 
-    ingresarUnUsuario: async (persona) => {
-        const query = 'SELECT * FROM persona WHERE email = ?'
-        nuevoUsuario = await qy(query, [persona.email])
-        if (nuevoUsuario)
-            return nuevoUsuario
-
-        query = 'INSERT INTO persona (nombre,alias,apellido,email) VALUES(?,?,?,?)'
-        nuevoUsuario = await qy(query, [persona.nombre, persona.alias, persona.apellido, persona.email])
+    addUser: async (persona) => {
+        const query = 'INSERT INTO persona (nombre,alias,apellido,email) VALUES(?,?,?,?)'
+        const nuevoUsuario = await qy(query, [persona.nombre, persona.alias, persona.apellido, persona.email])
 
         return nuevoUsuario
     },
+    validarUsuarioEmail: async (persona) => {
+        const query = 'SELECT * FROM persona WHERE email = ?'
+        const usuarioEnDataBase = await qy(query, [persona.email])
+        return usuarioEnDataBase
+    },
 
-    mostrarListaUsuario: async () => {
+    /*
+    ----------------
+    |ROUTE /PERSONA|
+    ----------------
+    */
+    viewUsers: async () => {
         const query = 'SELECT * FROM persona'
-        const listaPersonas = await qy(query, [req.params])
+        const listaPersonas = await qy(query, [0])
 
         return listaPersonas
     },
 
-    mostrarUnUsuario: async (id) => {
-        const query = 'SELECT * FROM persona WHERE id = ?';
-        const usuario = await qy(query, [req.params.id]);
+    /*
+    -------------------
+    |ROUTE /PERSONA/ID|
+    -------------------
+    */
 
-        return usuario[0]
+    selectUserById: async (id) => {
+        const query = 'SELECT * FROM persona WHERE id = ?';
+        const usuario = await qy(query, [id]);
+
+        return usuario
+    },
+    /* 
+-----------------------
+|MODIFY /PERSONA/ID|
+-----------------------
+ */
+
+    userModify: async (id) => {
+        const query = 'UPDATE persona SET nombre = ?, apellido = ?, alias = ? WHERE id=?';
+        const userMod = await qy(query, [id.nombe, id.apellido, id.alias])
+        return userMod
+    },
+    //reject change email
+    rejectEmail: async (id) => {
+        const query = 'SELECT * FROM persona WHERE email=?'
+        const reject = await qy(query, [id.email])
+        return console.log("El email no se puede modificar")
+    },
+    /* 
+    ___________________
+    |DELETE /PERSONA/ID|
+    --------------------
+    */
+
+    //Object selectUserById
+
+
+    //User with books
+    usuarioConLibro: async (id) => {
+        const query = 'SELECT * FROM libro WHERE persona_id=?';
+        const usuarioNoExiste = await qy(query, [req.params.id])
+
+        return usuarioNoExiste
     },
 
-    modificarUsuario: async (nombre, apellido, alias) => {
-        const query = 'UPDATE persona SET nombre = ?, apellido = ?, alias = ? WHERE id=?'
-        const usuarioModificado = await qy(query, [nombre, apellido, alias])
+    //User delete
 
-        return usuarioModificado.affectedRows
-    },
+    userDelete: async (id) => {
+        const query = 'DELETE FROM persona WHERE id = ?'
+        const userDelete = await qy(query, [id])
 
-    borrarUsuario: async (id) => {
-        const query = 'SELECT * FROM persona WHERE id = ?';
-        const borrado = await qy(query, [id])
-
-        return borrado.affectedRows
+        return userDelete
     }
 
 
